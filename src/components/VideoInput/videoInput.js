@@ -1,11 +1,13 @@
-import React from "react";
+import React, { forwardRef} from "react";
 
-const VideoInput = ({height, source, handleSource}) => {
-
+const VideoInput = forwardRef(function Videoinput(props, ref) {
+  const {width, height, source, handleSource, handlePlay, handlePause, handleEnd} = props
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
-    handleSource(url)
+    if (file) {
+      const url = URL.createObjectURL(file);
+      handleSource(url)
+    }
   };
 
   return (
@@ -17,16 +19,20 @@ const VideoInput = ({height, source, handleSource}) => {
       />
       {source && (
           <video
-          width="100%"
+          ref={ref}
+          width={width}
           height={height}
-          controls
           src={source}
           autoPlay={true}
+          onPlay={handlePlay}
+          onPause={handlePause}
+          onEnded={handleEnd}
+          className="hidden"
           />
           )}
       
     </div>
   );
-}
+})
 
 export default VideoInput;
